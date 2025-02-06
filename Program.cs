@@ -10,6 +10,12 @@ var connectionString = builder.Configuration.GetConnectionString(""); //Poner la
 builder.Services.AddScoped<IUserRepository, UserRepository>(provider =>
 new UserRepository(connectionString));
 
+builder.Services.AddScoped<IReviewRepository, ReviewRepository>(provider =>
+new ReviewRepository(connectionString));
+
+builder.Services.AddScoped<IFavoriteRepository, FavoriteRepository>(provider =>
+new FavoriteRepository(connectionString));
+
 // Add services to the container.
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
@@ -21,12 +27,10 @@ builder.Services.AddControllers()
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddScoped<IReviewRepository, ReviewRepository>(provider =>
-new ReviewRepository(connectionString));
-
 // Add services 
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IReviewService, ReviewService>();
+builder.Services.AddScoped<IFavoriteService, FavoriteService>();
 
 var app = builder.Build();
 
