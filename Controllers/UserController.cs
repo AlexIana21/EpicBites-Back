@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using EpicBites.Services;
 
-namespace Reto_Back.Controllers
+namespace EpicBites.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

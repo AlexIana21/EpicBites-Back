@@ -5,6 +5,5 @@ public class Favorite
     public DateTime Date {get;set;}
     public int UserId { get; set; }
     public int RecipeId { get; set; }
-    public Favorite(){
-    }
+    public Favorite(){}
 }

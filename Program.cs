@@ -16,6 +16,9 @@ new ReviewRepository(connectionString));
 builder.Services.AddScoped<IFavoriteRepository, FavoriteRepository>(provider =>
 new FavoriteRepository(connectionString));
 
+builder.Services.AddScoped<IRecipeRepository, RecipeRepository>(provider =>
+new RecipeRepository(connectionString));
+
 // Add services to the container.
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
@@ -31,6 +34,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IReviewService, ReviewService>();
 builder.Services.AddScoped<IFavoriteService, FavoriteService>();
+builder.Services.AddScoped<IRecipeService, RecipeService>();
 
 var app = builder.Build();
 
