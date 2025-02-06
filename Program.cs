@@ -1,4 +1,9 @@
 using System.Text.Json.Serialization;
+using Entities;
+using EpicBites.Controllers;
+using EpicBites.Repositories;
+using EpicBites.Services;
+using EpicBites.Service;
 
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString(""); //Poner la nuestra que sea necesaria.
@@ -14,7 +19,11 @@ builder.Services.AddControllers()
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddScoped<IReviewRepository, ReviewRepository>(provider =>
+new ReviewRepository(connectionString));
+
 // Add services 
+builder.Services.AddScoped<IReviewService, ReviewService>();
 
 var app = builder.Build();
 
