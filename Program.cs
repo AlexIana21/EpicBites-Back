@@ -1,7 +1,14 @@
+using EpicBites.Repositories;
+using EpicBites.Service;
+using EpicBites.Services;
 using System.Text.Json.Serialization;
+
 
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString(""); //Poner la nuestra que sea necesaria.
+
+builder.Services.AddScoped<IUserRepository, UserRepository>(provider =>
+new UserRepository(connectionString));
 
 // Add services to the container.
 builder.Services.AddControllers()
@@ -15,6 +22,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 // Add services 
+builder.Services.AddScoped<IUserService, UserService>();
 
 var app = builder.Build();
 
