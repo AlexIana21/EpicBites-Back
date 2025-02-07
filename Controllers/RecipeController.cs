@@ -53,7 +53,7 @@ namespace EpicBites.Controllers
             {
                 return NotFound($"Receta con ID {id} no encontrada.");
             }
-            // Actualizar el user existente
+            // Actualizar la receta existente
             existingRecipe.Name = updateRecipe.Name;
             existingRecipe.Description = updateRecipe.Description;
             existingRecipe.Meal = updateRecipe.Meal;
@@ -72,10 +72,10 @@ namespace EpicBites.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteRecipe(int id)
         {
-            var user = await _serviceRecipe.GetByIdAsync(id);
-            if (user == null)
+            var recipe = await _serviceRecipe.GetByIdAsync(id);
+            if (recipe == null)
             {
-                return NotFound($"Receta con ID {id} no encontrado.");
+                return NotFound($"Receta con ID {id} no encontrada.");
             }
 
             await _serviceRecipe.DeleteAsync(id);

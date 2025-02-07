@@ -35,8 +35,8 @@ namespace EpicBites.Service
 
         public async Task DeleteAsync(int id)
         {
-            var user = await _recipeRepository.GetByIdAsync(id);
-            if (user == null)
+            var recipe = await _recipeRepository.GetByIdAsync(id);
+            if (recipe == null)
             {
                 // Manejar el caso de no encontrado
             }
