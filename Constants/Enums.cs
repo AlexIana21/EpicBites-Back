@@ -2,15 +2,17 @@ using System.ComponentModel;
 
 namespace Constants;
 
-public static class Enums {
-    public enum UserRole { 
+public static class Enums
+{
+    public enum UserRole
+    {
         [Description("Admin")]
-        Admin, 
+        Admin,
         [Description("User")]
-        User 
+        User
     }
-
-    public enum Meal{
+    public enum Meal
+    {
         [Description("Breakfast")]
         Breakfast,
         [Description("MorningSnack")]
@@ -22,8 +24,8 @@ public static class Enums {
         [Description("Dinner")]
         Dinner
     }
-
-    public enum Diet{
+    public enum Diet
+    {
         [Description("Vegetarian")]
         Vegetarian,
         [Description("GlutenFree")]
@@ -39,8 +41,8 @@ public static class Enums {
         [Description("Mediterranean")]
         Mediterranean
     }
-
-     public enum Flavour{
+    public enum Flavour
+    {
         [Description("Sweet")]
         Sweet,
         [Description("Spicy")]
@@ -50,8 +52,8 @@ public static class Enums {
         [Description("Bitter")]
         Bitter
     }
-
-     public enum Difficulty{
+    public enum Difficulty
+    {
         [Description("Easy")]
         Easy,
         [Description("Medium")]
@@ -59,15 +61,39 @@ public static class Enums {
         [Description("Hard")]
         Hard
     }
-
-
-
-
-
-    
-    
+    public enum Category
+    {
+        [Description("Vegetables")]
+        Vegetables,
+        [Description("Fruits")]
+        Fruits,
+        [Description("Meat")]
+        Meat,
+        [Description("Fish")]
+        Fish,
+        [Description("Dairy")]
+        Dairy,
+        [Description("Grains")]
+        Grains,
+        [Description("Legumes")]
+        Legumes,
+        [Description("Nuts")]
+        Nuts,
+        [Description("Seeds")]
+        Seeds,
+        [Description("Herbs")]
+        Herbs,
+        [Description("Spices")]
+        Spices,
+        [Description("Oils")]
+        Oils,
+        [Description("Condiments")]
+        Condiments,
+        [Description("Sweets")]
+        Sweets,
+        [Description("Beverages")]
+        Beverages
+    }
 }
 
-
 //string description = Enumerations.GetEnumDescription((user)User.Admin);
-                                                                                                 
