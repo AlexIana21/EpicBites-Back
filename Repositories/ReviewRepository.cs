@@ -5,7 +5,7 @@ using MySql.Data.MySqlClient;
 namespace EpicBites.Repositories
 {
     public class ReviewRepository : IReviewRepository
-    { 
+    {
         private readonly string _connectionString;
 
         public ReviewRepository(string connectionString)
@@ -20,7 +20,7 @@ namespace EpicBites.Repositories
             {
                 await connection.OpenAsync();
 
-                string query = "";
+                string query = "SELECT Id, Text, Date, Score, UserId, RecipeId FROM Review";
                 using (var command = new MySqlCommand(query, connection))
                 {
                     using (var reader = await command.ExecuteReaderAsync())
@@ -35,7 +35,7 @@ namespace EpicBites.Repositories
                                 Score = reader.GetInt32(3),
                                 UserId = reader.GetInt32(4),
                                 RecipeId = reader.GetInt32(5)
-                            }; 
+                            };
 
                             reviews.Add(review);
                         }
@@ -47,12 +47,13 @@ namespace EpicBites.Repositories
 
         public async Task AddAsync(Review review)
         {
-            using (var connection = new MySqlConnection (_connectionString))
+            using (var connection = new MySqlConnection(_connectionString))
             {
                 await connection.OpenAsync();
 
-                string query = "";
-                using (var command = new MySqlCommand(query, connection)){
+                string query = "INSERT INTO Review (Text, Date, Score, UserId, RecipeId) VALUES (@Text, @Date, @Score, @UserId, @RecipeId)";
+                using (var command = new MySqlCommand(query, connection))
+                {
                     command.Parameters.AddWithValue("@Text", review.Text);
                     command.Parameters.AddWithValue("@Date", review.Date);
                     command.Parameters.AddWithValue("@Score", review.Score);
@@ -68,16 +69,16 @@ namespace EpicBites.Repositories
         {
             using (var connection = new MySqlConnection(_connectionString))
             {
-               await connection.OpenAsync();
+                await connection.OpenAsync();
 
-               string query = "";
+                string query = "DELETE FROM Review WHERE Id = @Id";
                 using (var command = new MySqlCommand(query, connection))
                 {
                     command.Parameters.AddWithValue("@Id", id);
 
                     await command.ExecuteNonQueryAsync();
                 }
-               
+
             }
         }
 
@@ -89,7 +90,7 @@ namespace EpicBites.Repositories
             {
                 await connection.OpenAsync();
 
-                string query = "";
+                string query = "SELECT Id, Text, Date, Score, UserId, RecipeId FROM Review WHERE Id = @Id";
                 using (var command = new MySqlCommand(query, connection))
                 {
                     command.Parameters.AddWithValue("@Id", id);
@@ -106,7 +107,7 @@ namespace EpicBites.Repositories
                                 Score = reader.GetInt32(3),
                                 UserId = reader.GetInt32(4),
                                 RecipeId = reader.GetInt32(5)
-                            }; 
+                            };
                         }
                     }
                 }
@@ -120,9 +121,10 @@ namespace EpicBites.Repositories
             {
                 await connection.OpenAsync();
 
-                string query = "";
+                string query = "UPDATE Review SET Id = @Id, Text = @Text, Date = @Date, Score = @Score, UserId = @UserId, RecipeId = @RecipeId WHERE Id = @Id";
                 using (var command = new MySqlCommand(query, connection))
                 {
+                    command.Parameters.AddWithValue("@Id", review.Id);
                     command.Parameters.AddWithValue("@Text", review.Text);
                     command.Parameters.AddWithValue("@Date", review.Date);
                     command.Parameters.AddWithValue("@Score", review.Score);
@@ -135,5 +137,5 @@ namespace EpicBites.Repositories
         }
     }
 
-   
+
 }
