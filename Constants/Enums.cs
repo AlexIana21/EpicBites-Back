@@ -94,6 +94,25 @@ public static class Enums
         [Description("Beverages")]
         Beverages
     }
+
+    public enum Unit {
+        [Description("g")]
+        g,
+        [Description("kg")]
+        kg,
+        [Description("ml")]
+        ml,
+        [Description("l")]
+        l,
+        [Description("tsp")]
+        tsp,
+        [Description("tbsp")]
+        tbsp,
+        [Description("cup")]
+        cup,
+        [Description("piece")]
+        piece
+    }
 }
 
 //string description = Enumerations.GetEnumDescription((user)User.Admin);
