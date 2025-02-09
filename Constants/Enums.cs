@@ -54,7 +54,7 @@ public static class Enums
     }
     public enum Difficulty
     {
-        [Description("Easy")]
+        [Description("Eeasy")]
         Easy,
         [Description("Medium")]
         Medium,

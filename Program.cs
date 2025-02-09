@@ -4,8 +4,9 @@ using EpicBites.Services;
 using System.Text.Json.Serialization;
 
 
+
 var builder = WebApplication.CreateBuilder(args);
-var connectionString = builder.Configuration.GetConnectionString(""); //Poner la nuestra que sea necesaria.
+var connectionString = builder.Configuration.GetConnectionString("EpicBites"); //Poner la nuestra que sea necesaria.
 
 builder.Services.AddScoped<IUserRepository, UserRepository>(provider =>
 new UserRepository(connectionString));
