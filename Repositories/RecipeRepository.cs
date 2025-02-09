@@ -19,7 +19,8 @@ namespace EpicBites.Repositories
             {
                 await connection.OpenAsync();
 
-                string query = "";
+                string query = "SELECT Id, Name, Description, Meal, Diet, Flavour, Time, Calories, Difficulty, Image FROM Recipe";
+
                 using (var command = new MySqlCommand(query, connection))
                 {
                     using (var reader = await command.ExecuteReaderAsync())
@@ -54,7 +55,10 @@ namespace EpicBites.Repositories
             {
                 await connection.OpenAsync();
 
-                string query = "";
+                string query = @"
+                INSERT INTO Recipe (Name, Description, Meal, Diet, Flavour, Time, Calories, Difficulty, Image) 
+                VALUES (@Name, @Description, @Meal, @Diet, @Flavour, @Time, @Calories, @Difficulty, @Image)";
+
                 using (var command = new MySqlCommand(query, connection)){
                     command.Parameters.AddWithValue("@Name", recipe.Name);
                     command.Parameters.AddWithValue("@Description", recipe.Description);
@@ -75,7 +79,7 @@ namespace EpicBites.Repositories
             {
                await connection.OpenAsync();
 
-               string query = "";
+               string query = "DELETE FROM Recipe WHERE Id = @Id";
                 using (var command = new MySqlCommand(query, connection))
                 {
                     command.Parameters.AddWithValue("@Id", id);
@@ -94,7 +98,8 @@ namespace EpicBites.Repositories
             {
                 await connection.OpenAsync();
 
-                string query = "";
+                string query = "SELECT Id, Name, Description, Meal, Diet, Flavour, Time, Calories, Difficulty, Image FROM Recipe WHERE Id = @Id";
+
                 using (var command = new MySqlCommand(query, connection))
                 {
                     command.Parameters.AddWithValue("@Id", id);
@@ -129,7 +134,19 @@ namespace EpicBites.Repositories
             {
                 await connection.OpenAsync();
 
-                string query = "";
+                string query = @"
+                UPDATE Recipe 
+                SET Name = @Name, 
+                    Description = @Description, 
+                    Meal = @Meal, 
+                    Diet = @Diet, 
+                    Flavour = @Flavour, 
+                    Time = @Time, 
+                    Calories = @Calories, 
+                    Difficulty = @Difficulty, 
+                    Image = @Image 
+                WHERE Id = @Id";
+
                 using (var command = new MySqlCommand(query, connection))
                 {
                     command.Parameters.AddWithValue("@Name", recipe.Name);
@@ -142,6 +159,9 @@ namespace EpicBites.Repositories
                     command.Parameters.AddWithValue("@Difficulty", recipe.Difficulty);
                     command.Parameters.AddWithValue("@Image", recipe.Image);
                     
+                    command.Parameters.AddWithValue("@Id", recipe.Id);
+
+
                     await command.ExecuteNonQueryAsync();
                 }
             }
