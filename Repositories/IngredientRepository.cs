@@ -18,7 +18,7 @@ namespace EpicBites.Repositories
             {
                 await connection.OpenAsync();
 
-                string query = "SELECT Id, Name, Category, Calories, Allergen, Image FROM Ingredients";
+                string query = "SELECT Id, Name, Category, Calories, Allergen, Image FROM Ingredient";
                 using (var command = new MySqlCommand(query, connection))
                 {
                     using (var reader = await command.ExecuteReaderAsync())
@@ -31,7 +31,7 @@ namespace EpicBites.Repositories
                                 Name = reader.GetString(1),
                                 Category = Enum.Parse<Constants.Enums.Category>(reader.GetString(2)),
                                 Calories = reader.GetInt32(3),
-                                Allergen = reader.GetInt32(4),
+                                Allergen = reader.IsDBNull(4) ? "" : reader.GetString(4),
                                 Image = reader.GetString(5),
                             };
                             ingredients.Add(ingredient);
@@ -48,7 +48,7 @@ namespace EpicBites.Repositories
             {
                 await connection.OpenAsync();
 
-                string query = "INSERT INTO Ingredients (Name, Category, Calories, Allergen, Image) VALUES (@Name, @Category, @Calories, @Allergen, @Image)";
+                string query = "INSERT INTO Ingredient (Name, Category, Calories, Allergen, Image) VALUES (@Name, @Category, @Calories, @Allergen, @Image)";
                 using (var command = new MySqlCommand(query, connection))
                 {
                     command.Parameters.AddWithValue("@Name", ingredient.Name);
@@ -66,7 +66,7 @@ namespace EpicBites.Repositories
             {
                 await connection.OpenAsync();
 
-                string query = "DELETE FROM Ingredients WHERE Id = @Id";
+                string query = "DELETE FROM Ingredient WHERE Id = @Id";
                 using (var command = new MySqlCommand(query, connection))
                 {
                     command.Parameters.AddWithValue("@Id", id);
@@ -85,7 +85,7 @@ namespace EpicBites.Repositories
             {
                 await connection.OpenAsync();
 
-                string query = "SELECT Id, Name, Category, Calories, Allergen, Image FROM Ingredients WHERE Id = @Id";
+                string query = "SELECT Id, Name, Category, Calories, Allergen, Image FROM Ingredient WHERE Id = @Id";
                 using (var command = new MySqlCommand(query, connection))
                 {
                     command.Parameters.AddWithValue("@Id", id);
@@ -100,7 +100,7 @@ namespace EpicBites.Repositories
                                 Name = reader.GetString(1),
                                 Category = Enum.Parse<Constants.Enums.Category>(reader.GetString(2)),
                                 Calories = reader.GetInt32(3),
-                                Allergen = reader.GetInt32(4),
+                                Allergen = reader.IsDBNull(4) ? "" : reader.GetString(4),
                                 Image = reader.GetString(5),
                             };
                         }
@@ -116,7 +116,7 @@ namespace EpicBites.Repositories
             {
                 await connection.OpenAsync();
 
-                string query = "UPDATE Ingredients SET Name = @Name, Category = @Category, Calories = @Calories, Allergen = @Allergen, Image = @Image WHERE Id = @Id";
+                string query = "UPDATE Ingredient SET Name = @Name, Category = @Category, Calories = @Calories, Allergen = @Allergen, Image = @Image WHERE Id = @Id";
                 using (var command = new MySqlCommand(query, connection))
                 {
                     command.Parameters.AddWithValue("@Id", ingredient.Id);
