@@ -63,39 +63,40 @@ public static class Enums
     }
     public enum Category
     {
-        [Description("Vegetables")]
-        Vegetables,
-        [Description("Fruits")]
-        Fruits,
+        [Description("Vegetable")]
+        Vegetable,
+        [Description("Fruit")]
+        Fruit,
+        [Description("Dairy")]
+        Dairy,
         [Description("Meat")]
         Meat,
         [Description("Fish")]
         Fish,
-        [Description("Dairy")]
-        Dairy,
-        [Description("Grains")]
-        Grains,
-        [Description("Legumes")]
+        [Description("Grain")]
+        Grain,
+        [Description("Nut")]
+        Nut,
+        [Description("Legume")]
         Legumes,
-        [Description("Nuts")]
-        Nuts,
-        [Description("Seeds")]
-        Seeds,
-        [Description("Herbs")]
-        Herbs,
-        [Description("Spices")]
-        Spices,
-        [Description("Oils")]
-        Oils,
-        [Description("Condiments")]
-        Condiments,
-        [Description("Sweets")]
-        Sweets,
-        [Description("Beverages")]
-        Beverages
+        [Description("Spice")]
+        Spice,
+        [Description("Herb")]
+        Herb,
+        [Description("Oil")]
+        Oil,
+        [Description("Sweetener")]
+        Sweetener,
+        [Description("Beverage")]
+        Beverage,
+        [Description("Condiment")]
+        Condiment,
+        [Description("Other")]
+        Other,
     }
 
-    public enum Unit {
+    public enum Unit
+    {
         [Description("g")]
         g,
         [Description("ml")]
