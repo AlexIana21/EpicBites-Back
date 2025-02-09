@@ -98,8 +98,6 @@ public static class Enums
     public enum Unit {
         [Description("g")]
         g,
-        [Description("kg")]
-        kg,
         [Description("ml")]
         ml,
         [Description("l")]
