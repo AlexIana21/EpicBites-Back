@@ -18,7 +18,7 @@ namespace EpicBites.Repositories
             {
                 await connection.OpenAsync();
 
-                string query = "";
+                string query = "SELECT Id, Name, Category, Calories, Allergen, Image FROM Ingredients";
                 using (var command = new MySqlCommand(query, connection))
                 {
                     using (var reader = await command.ExecuteReaderAsync())
@@ -48,7 +48,7 @@ namespace EpicBites.Repositories
             {
                 await connection.OpenAsync();
 
-                string query = "";
+                string query = "INSERT INTO Ingredients (Name, Category, Calories, Allergen, Image) VALUES (@Name, @Category, @Calories, @Allergen, @Image)";
                 using (var command = new MySqlCommand(query, connection))
                 {
                     command.Parameters.AddWithValue("@Name", ingredient.Name);
@@ -66,7 +66,7 @@ namespace EpicBites.Repositories
             {
                 await connection.OpenAsync();
 
-                string query = "";
+                string query = "DELETE FROM Ingredients WHERE Id = @Id";
                 using (var command = new MySqlCommand(query, connection))
                 {
                     command.Parameters.AddWithValue("@Id", id);
@@ -85,7 +85,7 @@ namespace EpicBites.Repositories
             {
                 await connection.OpenAsync();
 
-                string query = "";
+                string query = "SELECT Id, Name, Category, Calories, Allergen, Image FROM Ingredients WHERE Id = @Id";
                 using (var command = new MySqlCommand(query, connection))
                 {
                     command.Parameters.AddWithValue("@Id", id);
@@ -116,7 +116,7 @@ namespace EpicBites.Repositories
             {
                 await connection.OpenAsync();
 
-                string query = "";
+                string query = "UPDATE Ingredients SET Name = @Name, Category = @Category, Calories = @Calories, Allergen = @Allergen, Image = @Image WHERE Id = @Id";
                 using (var command = new MySqlCommand(query, connection))
                 {
                     command.Parameters.AddWithValue("@Id", ingredient.Id);
