@@ -20,7 +20,7 @@ namespace EpicBites.Repositories
             {
                 await connection.OpenAsync();
 
-                string query = "";
+                string query = "SELECT Id, Date, UserId, RecipeId FROM Favorite";
                 using (var command = new MySqlCommand(query, connection))
                 {
                     using (var reader = await command.ExecuteReaderAsync())
@@ -49,7 +49,10 @@ namespace EpicBites.Repositories
             {
                 await connection.OpenAsync();
 
-                string query = "";
+                string query = @"
+                INSERT INTO Favorite (Date, UserId, RecipeId) 
+                VALUES (@Date, @UserId, @RecipeId)";
+
                 using (var command = new MySqlCommand(query, connection)){
                     command.Parameters.AddWithValue("@Date", favorite.Date);
                     command.Parameters.AddWithValue("@UserId", favorite.UserId);
@@ -66,7 +69,7 @@ namespace EpicBites.Repositories
             {
                await connection.OpenAsync();
 
-               string query = "";
+               string query = "DELETE FROM Favorite WHERE Id = @Id";
                 using (var command = new MySqlCommand(query, connection))
                 {
                     command.Parameters.AddWithValue("@Id", id);
@@ -85,7 +88,7 @@ namespace EpicBites.Repositories
             {
                 await connection.OpenAsync();
 
-                string query = "";
+                string query = "SELECT Id, Date, UserId, RecipeId FROM Favorite WHERE Id = @Id";
                 using (var command = new MySqlCommand(query, connection))
                 {
                     command.Parameters.AddWithValue("@Id", id);
@@ -114,12 +117,16 @@ namespace EpicBites.Repositories
             {
                 await connection.OpenAsync();
 
-                string query = "";
+                string query = @"
+                UPDATE Favorite 
+                SET Date = @Date, UserId = @UserId, RecipeId = @RecipeId 
+                WHERE Id = @Id";
                 using (var command = new MySqlCommand(query, connection))
                 {
                     command.Parameters.AddWithValue("@Date", favorite.Date);
                     command.Parameters.AddWithValue("@UserId", favorite.UserId);
                     command.Parameters.AddWithValue("@RecipeId", favorite.RecipeId);
+                    command.Parameters.AddWithValue("@Id", favorite.Id);
 
                     await command.ExecuteNonQueryAsync();
                 }
