@@ -59,16 +59,18 @@ namespace EpicBites.Repositories
                 INSERT INTO Recipe (Name, Description, Meal, Diet, Flavour, Time, Calories, Difficulty, Image) 
                 VALUES (@Name, @Description, @Meal, @Diet, @Flavour, @Time, @Calories, @Difficulty, @Image)";
 
-                using (var command = new MySqlCommand(query, connection)){
+                using (var command = new MySqlCommand(query, connection))
+                {
                     command.Parameters.AddWithValue("@Name", recipe.Name);
                     command.Parameters.AddWithValue("@Description", recipe.Description);
-                    command.Parameters.AddWithValue("@Meal", recipe.Meal);
-                    command.Parameters.AddWithValue("@Diet", recipe.Diet);
-                    command.Parameters.AddWithValue("@Flavour", recipe.Flavour);
+                    command.Parameters.AddWithValue("@Meal", recipe.Meal.ToString()); 
+                    command.Parameters.AddWithValue("@Diet", recipe.Diet.ToString());
+                    command.Parameters.AddWithValue("@Flavour", recipe.Flavour.ToString());
                     command.Parameters.AddWithValue("@Time", recipe.Time);
                     command.Parameters.AddWithValue("@Calories", recipe.Calories);
-                    command.Parameters.AddWithValue("@Difficulty", recipe.Difficulty);
+                    command.Parameters.AddWithValue("@Difficulty", recipe.Difficulty.ToString());
                     command.Parameters.AddWithValue("@Image", recipe.Image);
+                    
                     await command.ExecuteNonQueryAsync();
                 }
             }
@@ -150,15 +152,14 @@ namespace EpicBites.Repositories
                 using (var command = new MySqlCommand(query, connection))
                 {
                     command.Parameters.AddWithValue("@Name", recipe.Name);
-                    command.Parameters.AddWithValue("@Description", recipe.Description);
-                    command.Parameters.AddWithValue("@Meal", recipe.Meal);
-                    command.Parameters.AddWithValue("@Diet", recipe.Diet);
+                    command.Parameters.AddWithValue("@Description", recipe.Description.ToString());
+                    command.Parameters.AddWithValue("@Meal", recipe.Meal.ToString());
+                    command.Parameters.AddWithValue("@Diet", recipe.Diet.ToString());
                     command.Parameters.AddWithValue("@Flavour", recipe.Flavour);
                     command.Parameters.AddWithValue("@Time", recipe.Time);
                     command.Parameters.AddWithValue("@Calories", recipe.Calories);
-                    command.Parameters.AddWithValue("@Difficulty", recipe.Difficulty);
+                    command.Parameters.AddWithValue("@Difficulty", recipe.Difficulty.ToString());
                     command.Parameters.AddWithValue("@Image", recipe.Image);
-                    
                     command.Parameters.AddWithValue("@Id", recipe.Id);
 
 
