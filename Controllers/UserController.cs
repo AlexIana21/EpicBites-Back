@@ -22,7 +22,7 @@ namespace EpicBites.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<User>> GetUser(int id)
+        public async Task<ActionResult<User>> GetUserById(int id)
         {
             var user = await _serviceUser.GetByIdAsync(id);
             if (user == null)
@@ -40,9 +40,8 @@ namespace EpicBites.Controllers
             {
                 return Conflict($"Ya existe un admin con el ID {user.Id}.");
             }
-
             await _serviceUser.AddAsync(user);
-            return CreatedAtAction(nameof(GetUser), new { id = user.Id }, user);
+            return CreatedAtAction(nameof(GetUserById), new { id = user.Id }, user);
         }
 
         [HttpPut("{id}")]

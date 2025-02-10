@@ -24,7 +24,7 @@ namespace EpicBites.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Favorite>> GetFavorite(int id)
+        public async Task<ActionResult<Favorite>> GetFavoriteById(int id)
         {
             var favorite = await _serviceFavorite.GetByIdAsync(id);
             if (favorite == null)
@@ -44,7 +44,7 @@ namespace EpicBites.Controllers
             }
 
             await _serviceFavorite.AddAsync(favorite);
-            return CreatedAtAction(nameof(GetFavorite), new { id = favorite.Id }, favorite);
+            return CreatedAtAction(nameof(GetFavoriteById), new { id = favorite.Id }, favorite);
         }
 
         [HttpDelete("{id}")]

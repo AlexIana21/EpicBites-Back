@@ -24,7 +24,7 @@ namespace EpicBites.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Review>> GetReview(int id)
+        public async Task<ActionResult<Review>> GetReviewById(int id)
         {
             var review = await _serviceReview.GetByIdAsync(id);
             if (review == null)
@@ -38,7 +38,7 @@ namespace EpicBites.Controllers
         public async Task<ActionResult<Review>> CreateReview(Review review)
         {
             await _serviceReview.AddAsync(review);
-            return CreatedAtAction(nameof(GetReview), new { id = review.Id }, review);
+            return CreatedAtAction(nameof(GetReviewById), new { id = review.Id }, review);
         }
 
         [HttpDelete("{id}")]

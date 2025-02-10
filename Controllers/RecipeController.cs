@@ -22,7 +22,7 @@ namespace EpicBites.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Recipe>> GetRecipe(int id)
+        public async Task<ActionResult<Recipe>> GetRecipeById(int id)
         {
             var recipe = await _serviceRecipe.GetByIdAsync(id);
             if (recipe == null)
@@ -42,7 +42,7 @@ namespace EpicBites.Controllers
             }
 
             await _serviceRecipe.AddAsync(recipe);
-            return CreatedAtAction(nameof(_serviceRecipe), new { id = recipe.Id }, recipe);
+            return CreatedAtAction(nameof(GetRecipeById), new { id = recipe.Id }, recipe);
         }
 
         [HttpPut("{id}")]

@@ -4,7 +4,7 @@ using MySql.Data.MySqlClient;
 namespace EpicBites.Repositories
 {
     public class RecipeRepository : IRecipeRepository
-    { 
+    {
         private readonly string _connectionString;
 
         public RecipeRepository(string connectionString)
@@ -51,7 +51,7 @@ namespace EpicBites.Repositories
 
         public async Task AddAsync(Recipe recipe)
         {
-            using (var connection = new MySqlConnection (_connectionString))
+            using (var connection = new MySqlConnection(_connectionString))
             {
                 await connection.OpenAsync();
 
@@ -63,14 +63,14 @@ namespace EpicBites.Repositories
                 {
                     command.Parameters.AddWithValue("@Name", recipe.Name);
                     command.Parameters.AddWithValue("@Description", recipe.Description);
-                    command.Parameters.AddWithValue("@Meal", recipe.Meal.ToString()); 
+                    command.Parameters.AddWithValue("@Meal", recipe.Meal.ToString());
                     command.Parameters.AddWithValue("@Diet", recipe.Diet.ToString());
                     command.Parameters.AddWithValue("@Flavour", recipe.Flavour.ToString());
                     command.Parameters.AddWithValue("@Time", recipe.Time);
                     command.Parameters.AddWithValue("@Calories", recipe.Calories);
                     command.Parameters.AddWithValue("@Difficulty", recipe.Difficulty.ToString());
                     command.Parameters.AddWithValue("@Image", recipe.Image);
-                    
+
                     await command.ExecuteNonQueryAsync();
                 }
             }
@@ -79,16 +79,16 @@ namespace EpicBites.Repositories
         {
             using (var connection = new MySqlConnection(_connectionString))
             {
-               await connection.OpenAsync();
+                await connection.OpenAsync();
 
-               string query = "DELETE FROM Recipe WHERE Id = @Id";
+                string query = "DELETE FROM Recipe WHERE Id = @Id";
                 using (var command = new MySqlCommand(query, connection))
                 {
                     command.Parameters.AddWithValue("@Id", id);
 
                     await command.ExecuteNonQueryAsync();
                 }
-               
+
             }
         }
 
@@ -151,6 +151,7 @@ namespace EpicBites.Repositories
 
                 using (var command = new MySqlCommand(query, connection))
                 {
+                    command.Parameters.AddWithValue("@Id", recipe.Id);
                     command.Parameters.AddWithValue("@Name", recipe.Name);
                     command.Parameters.AddWithValue("@Description", recipe.Description.ToString());
                     command.Parameters.AddWithValue("@Meal", recipe.Meal.ToString());
@@ -160,8 +161,6 @@ namespace EpicBites.Repositories
                     command.Parameters.AddWithValue("@Calories", recipe.Calories);
                     command.Parameters.AddWithValue("@Difficulty", recipe.Difficulty.ToString());
                     command.Parameters.AddWithValue("@Image", recipe.Image);
-                    command.Parameters.AddWithValue("@Id", recipe.Id);
-
 
                     await command.ExecuteNonQueryAsync();
                 }
