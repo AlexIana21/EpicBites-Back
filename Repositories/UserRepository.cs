@@ -19,7 +19,7 @@ namespace EpicBites.Repositories
             {
                 await connection.OpenAsync();
 
-                string query = "";
+                string query = "SELECT Id, Email, Password, Role FROM User";
                 using (var command = new MySqlCommand(query, connection))
                 {
                     using (var reader = await command.ExecuteReaderAsync())
@@ -48,11 +48,14 @@ namespace EpicBites.Repositories
             {
                 await connection.OpenAsync();
 
-                string query = "";
+                string query = @"
+                INSERT INTO User (Email, Password, Role) 
+                VALUES (@Email, @Password, @Role)";
+
                 using (var command = new MySqlCommand(query, connection)){
                     command.Parameters.AddWithValue("@Email", user.Email);
                     command.Parameters.AddWithValue("@Password", user.Password);
-                    command.Parameters.AddWithValue("@Role", user.Role);
+                    command.Parameters.AddWithValue("@Role", user.Role.ToString());
                     await command.ExecuteNonQueryAsync();
                 }
             }
@@ -63,7 +66,7 @@ namespace EpicBites.Repositories
             {
                await connection.OpenAsync();
 
-               string query = "";
+                string query = "DELETE FROM User WHERE Id = @Id";
                 using (var command = new MySqlCommand(query, connection))
                 {
                     command.Parameters.AddWithValue("@Id", id);
@@ -82,7 +85,7 @@ namespace EpicBites.Repositories
             {
                 await connection.OpenAsync();
 
-                string query = "";
+                string query = "SELECT Id, Email, Password, Role FROM User WHERE Id = @Id";
                 using (var command = new MySqlCommand(query, connection))
                 {
                     command.Parameters.AddWithValue("@Id", id);
@@ -111,12 +114,16 @@ namespace EpicBites.Repositories
             {
                 await connection.OpenAsync();
 
-                string query = "";
+                string query = @"
+                UPDATE User 
+                SET Email = @Email, Password = @Password, Role = @Role 
+                WHERE Id = @Id";
                 using (var command = new MySqlCommand(query, connection))
                 {
                     command.Parameters.AddWithValue("@Email", user.Email);
                     command.Parameters.AddWithValue("@Password", user.Password);
-                    command.Parameters.AddWithValue("@Role", user.Role);
+                    command.Parameters.AddWithValue("@Role", user.Role.ToString());
+                    command.Parameters.AddWithValue("@Id", user.Id);
 
                     await command.ExecuteNonQueryAsync();
                 }
