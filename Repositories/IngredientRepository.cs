@@ -52,7 +52,7 @@ namespace EpicBites.Repositories
                 using (var command = new MySqlCommand(query, connection))
                 {
                     command.Parameters.AddWithValue("@Name", ingredient.Name);
-                    command.Parameters.AddWithValue("@Category", ingredient.Category);
+                    command.Parameters.AddWithValue("@Category", ingredient.Category.ToString());
                     command.Parameters.AddWithValue("@Calories", ingredient.Calories);
                     command.Parameters.AddWithValue("@Allergen", ingredient.Allergen);
                     command.Parameters.AddWithValue("@Image", ingredient.Image);
@@ -121,7 +121,7 @@ namespace EpicBites.Repositories
                 {
                     command.Parameters.AddWithValue("@Id", ingredient.Id);
                     command.Parameters.AddWithValue("@Name", ingredient.Name);
-                    command.Parameters.AddWithValue("@Category", ingredient.Category);
+                    command.Parameters.AddWithValue("@Category", ingredient.Category.ToString());
                     command.Parameters.AddWithValue("@Calories", ingredient.Calories);
                     command.Parameters.AddWithValue("@Allergen", ingredient.Allergen);
                     command.Parameters.AddWithValue("@Image", ingredient.Image);
