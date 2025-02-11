@@ -1,6 +1,6 @@
 using Constants;
 
-public class PostRecipeDto
+public class RecipeDto
 {
 
     public string Name { get; set; }
@@ -13,6 +13,6 @@ public class PostRecipeDto
     public  Enums.Difficulty Difficulty { get; set; }
     public string Image { get; set; }
 
-    public PostRecipeDto () {}
+    public RecipeDto () {}
    
 }

@@ -168,5 +168,46 @@ namespace EpicBites.Repositories
             }
         }
 
+        public async Task<Recipe?> RecipeAsync()
+        {
+            Recipe recipe = null;
+
+            using (var connection = new MySqlConnection(_connectionString))
+            {
+                await connection.OpenAsync();
+
+                string query = @"
+                    SELECT Name, Description, Meal, Diet, Flavour, Time, Calories, Difficulty, Image 
+                    FROM Recipe 
+                    WHERE Id = @Id";
+
+                using (var command = new MySqlCommand(query, connection))
+                {
+
+                    using (var reader = await command.ExecuteReaderAsync())
+                    {
+                        if (await reader.ReadAsync())
+                        {
+                            recipe = new Recipe
+                            {
+                                Id = reader.GetInt32(0),
+                                Name = reader.GetString(1),
+                                Description = reader.GetString(2),
+                                Meal = Enum.Parse<Constants.Enums.Meal>(reader.GetString(3)),
+                                Diet = Enum.Parse<Constants.Enums.Diet>(reader.GetString(4)),
+                                Flavour = Enum.Parse<Constants.Enums.Flavour>(reader.GetString(5)),
+                                Time = reader.GetInt32(6),
+                                Calories = reader.GetInt32(7),
+                                Difficulty = Enum.Parse<Constants.Enums.Difficulty>(reader.GetString(8)),
+                                Image = reader.GetString(9)
+                            };
+                        }
+                    }
+                }
+            }
+            return recipe;
+        }
+
+        
     }
 }

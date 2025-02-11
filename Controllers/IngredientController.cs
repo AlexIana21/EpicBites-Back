@@ -22,7 +22,7 @@ namespace EpicBites.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Ingredient>> GetIngredient(int id)
+        public async Task<ActionResult<IngredientDto>> GetIngredient(int id)
         {
             var ingredient = await _serviceIngredient.GetByIdAsync(id);
             if (ingredient == null)
@@ -33,31 +33,37 @@ namespace EpicBites.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Ingredient>> CreateIngredient(Ingredient ingredient)
+        public async Task<ActionResult<IngredientDto>> CreateIngredient(IngredientDto ingredientDto)
         {
-            var existingIngredient = await _serviceIngredient.GetByIdAsync(ingredient.Id);
-            if (existingIngredient != null)
+            var ingredient = new Ingredient
             {
-                return Conflict($"Ya existe un ingrediente con el ID {ingredient.Id}.");
-            }
+                Name = ingredientDto.Name,
+                Category = ingredientDto.Category,
+                Calories = ingredientDto.Calories,
+                Allergen = ingredientDto.Allergen,
+                Image = ingredientDto.Image,
+            };
 
             await _serviceIngredient.AddAsync(ingredient);
-            return CreatedAtAction(nameof(_serviceIngredient), new { id = ingredient.Id }, ingredient);
+            return CreatedAtAction(nameof(GetIngredient), new { id = ingredient.Id }, ingredientDto);
         }
 
+
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateIngredient(int id, Ingredient updateIngredient)
+        public async Task<IActionResult> UpdateIngredient(int id, IngredientDto updateIngredient)
         {
             var existingIngredient = await _serviceIngredient.GetByIdAsync(id);
             if (existingIngredient == null)
             {
                 return NotFound($"Ingrediente con ID {id} no encontrado.");
             }
+
             existingIngredient.Name = updateIngredient.Name;
             existingIngredient.Category = updateIngredient.Category;
             existingIngredient.Calories = updateIngredient.Calories;
             existingIngredient.Allergen = updateIngredient.Allergen;
             existingIngredient.Image = updateIngredient.Image;
+
             await _serviceIngredient.UpdateAsync(existingIngredient);
             return NoContent();
         }

@@ -43,5 +43,10 @@ namespace EpicBites.Service
             }
             await _ingredientRepository.DeleteAsync(id);
         }
+
+        public async Task<Ingredient?> IngredientAsync()
+        {
+            return await _ingredientRepository.IngredientAsync();
+        }
     }
 }

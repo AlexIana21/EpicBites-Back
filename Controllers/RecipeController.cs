@@ -22,7 +22,7 @@ namespace EpicBites.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Recipe>> GetRecipe(int id)
+        public async Task<ActionResult<RecipeDto>> GetRecipe(int id)
         {
             var recipe = await _serviceRecipe.GetByIdAsync(id);
             if (recipe == null)
@@ -33,27 +33,35 @@ namespace EpicBites.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Recipe>> CreateRecipe(Recipe recipe)
+        public async Task<ActionResult<RecipeDto>> CreateRecipe(RecipeDto recipeDto)
         {
-            var existingRecipe = await _serviceRecipe.GetByIdAsync(recipe.Id);
-            if (existingRecipe != null)
+            var recipe = new Recipe
             {
-                return Conflict($"Ya existe una receta con el ID {recipe.Id}.");
-            }
+                Name = recipeDto.Name,
+                Description = recipeDto.Description,
+                Meal = recipeDto.Meal,
+                Diet = recipeDto.Diet,
+                Flavour = recipeDto.Flavour,
+                Time = recipeDto.Time,
+                Calories = recipeDto.Calories,
+                Difficulty = recipeDto.Difficulty,
+                Image = recipeDto.Image
+            };
 
             await _serviceRecipe.AddAsync(recipe);
-            return CreatedAtAction(nameof(_serviceRecipe), new { id = recipe.Id }, recipe);
+            return CreatedAtAction(nameof(GetRecipe), new { id = recipe.Id }, recipeDto);
         }
 
+
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateRecipe(int id, Recipe updateRecipe)
+        public async Task<IActionResult> UpdateRecipe(int id, RecipeDto updateRecipe)
         {
             var existingRecipe = await _serviceRecipe.GetByIdAsync(id);
             if (existingRecipe == null)
             {
                 return NotFound($"Receta con ID {id} no encontrada.");
             }
-            // Actualizar la receta existente
+
             existingRecipe.Name = updateRecipe.Name;
             existingRecipe.Description = updateRecipe.Description;
             existingRecipe.Meal = updateRecipe.Meal;
@@ -64,10 +72,10 @@ namespace EpicBites.Controllers
             existingRecipe.Difficulty = updateRecipe.Difficulty;
             existingRecipe.Image = updateRecipe.Image;
 
-
             await _serviceRecipe.UpdateAsync(existingRecipe);
             return NoContent();
         }
+
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteRecipe(int id)
