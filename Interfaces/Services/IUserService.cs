@@ -8,5 +8,6 @@ public interface IUserService
         Task AddAsync(User user);
         Task UpdateAsync(User user);
         Task DeleteAsync(int id);
+        Task<User?> LoginAsync(string email, string password);
     }
 }

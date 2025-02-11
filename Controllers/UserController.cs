@@ -22,14 +22,20 @@ namespace EpicBites.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<User>> GetUser(int id)
+        public async Task<ActionResult<UserDto>> GetUser(int id)
         {
             var user = await _serviceUser.GetByIdAsync(id);
             if (user == null)
             {
                 return NotFound($"User con ID {id} no encontrado.");
             }
-            return Ok(user);
+            var userDto = new UserDto
+            {
+                Username = user.Username,
+                Email = user.Email,
+                Role = user.Role
+            };
+            return Ok(userDto);
         }
 
         [HttpPost]
@@ -45,6 +51,25 @@ namespace EpicBites.Controllers
             return CreatedAtAction(nameof(GetUser), new { id = user.Id }, user);
         }
 
+        [HttpPost("login")]
+        public async Task<ActionResult<UserDto>> Login([FromBody] LoginDto login)
+        {
+            var user = await _serviceUser.LoginAsync(login.Email, login.Password);
+            if (user == null)
+            {
+                return NotFound("Usuario no encontrado.");
+            }
+
+            var userDto = new UserDto
+            {
+                Username = user.Username,
+                Email = user.Email,
+                Role = user.Role
+            };
+
+            return Ok(userDto);
+        }
+
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateUser(int id, User updateUser)
         {
@@ -54,6 +79,7 @@ namespace EpicBites.Controllers
                 return NotFound($"User con ID {id} no encontrada.");
             }
             // Actualizar el user existente
+            existingUser.Username = updateUser.Username;
             existingUser.Email = updateUser.Email;
             existingUser.Password = updateUser.Password;
             existingUser.Role = updateUser.Role;

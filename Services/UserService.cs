@@ -42,5 +42,10 @@ namespace EpicBites.Service
             }
             await _userRepository.DeleteAsync(id);
         }
+
+        public async Task<User?> LoginAsync(string email, string password)
+        {
+            return await _userRepository.LoginAsync(email, password);
+        }
     }
 }

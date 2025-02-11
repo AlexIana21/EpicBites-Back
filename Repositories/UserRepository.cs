@@ -4,7 +4,7 @@ using MySql.Data.MySqlClient;
 namespace EpicBites.Repositories
 {
     public class UserRepository : IUserRepository
-    { 
+    {
         private readonly string _connectionString;
 
         public UserRepository(string connectionString)
@@ -19,7 +19,7 @@ namespace EpicBites.Repositories
             {
                 await connection.OpenAsync();
 
-                string query = "SELECT Id, Email, Password, Role FROM User";
+                string query = "SELECT Id, Username, Email, Password, Role FROM User";
                 using (var command = new MySqlCommand(query, connection))
                 {
                     using (var reader = await command.ExecuteReaderAsync())
@@ -29,9 +29,10 @@ namespace EpicBites.Repositories
                             var user = new User
                             {
                                 Id = reader.GetInt32(0),
-                                Email = reader.GetString(1),
-                                Password = reader.GetString(2),
-                                Role = Enum.Parse<Constants.Enums.UserRole>(reader.GetString(3)),
+                                Username = reader.GetString(1),
+                                Email = reader.GetString(2),
+                                Password = reader.GetString(3),
+                                Role = Enum.Parse<Constants.Enums.UserRole>(reader.GetString(4)),
                                 //UserRole.GetValue(reader.GetString(3))
                             };
                             users.Add(user);
@@ -44,15 +45,17 @@ namespace EpicBites.Repositories
 
         public async Task AddAsync(User user)
         {
-            using (var connection = new MySqlConnection (_connectionString))
+            using (var connection = new MySqlConnection(_connectionString))
             {
                 await connection.OpenAsync();
 
                 string query = @"
-                INSERT INTO User (Email, Password, Role) 
-                VALUES (@Email, @Password, @Role)";
+                INSERT INTO User (Username, Email, Password, Role) 
+                VALUES (@Username ,@Email, @Password, @Role)";
 
-                using (var command = new MySqlCommand(query, connection)){
+                using (var command = new MySqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@Email", user.Email);
                     command.Parameters.AddWithValue("@Email", user.Email);
                     command.Parameters.AddWithValue("@Password", user.Password);
                     command.Parameters.AddWithValue("@Role", user.Role.ToString());
@@ -64,7 +67,7 @@ namespace EpicBites.Repositories
         {
             using (var connection = new MySqlConnection(_connectionString))
             {
-               await connection.OpenAsync();
+                await connection.OpenAsync();
 
                 string query = "DELETE FROM User WHERE Id = @Id";
                 using (var command = new MySqlCommand(query, connection))
@@ -73,7 +76,7 @@ namespace EpicBites.Repositories
 
                     await command.ExecuteNonQueryAsync();
                 }
-               
+
             }
         }
 
@@ -85,7 +88,7 @@ namespace EpicBites.Repositories
             {
                 await connection.OpenAsync();
 
-                string query = "SELECT Id, Email, Password, Role FROM User WHERE Id = @Id";
+                string query = "SELECT Id, Username, Email, Password, Role FROM User WHERE Id = @Id";
                 using (var command = new MySqlCommand(query, connection))
                 {
                     command.Parameters.AddWithValue("@Id", id);
@@ -97,9 +100,10 @@ namespace EpicBites.Repositories
                             user = new User
                             {
                                 Id = reader.GetInt32(0),
-                                Email = reader.GetString(1),
-                                Password = reader.GetString(2),
-                                Role = Enum.Parse<Constants.Enums.UserRole>(reader.GetString(3)),
+                                Username = reader.GetString(1),
+                                Email = reader.GetString(2),
+                                Password = reader.GetString(3),
+                                Role = Enum.Parse<Constants.Enums.UserRole>(reader.GetString(4)),
                             };
                         }
                     }
@@ -116,10 +120,11 @@ namespace EpicBites.Repositories
 
                 string query = @"
                 UPDATE User 
-                SET Email = @Email, Password = @Password, Role = @Role 
+                SET Username = @Username, Email = @Email, Password = @Password, Role = @Role 
                 WHERE Id = @Id";
                 using (var command = new MySqlCommand(query, connection))
                 {
+                    command.Parameters.AddWithValue("@Username", user.Username);
                     command.Parameters.AddWithValue("@Email", user.Email);
                     command.Parameters.AddWithValue("@Password", user.Password);
                     command.Parameters.AddWithValue("@Role", user.Role.ToString());
@@ -128,6 +133,39 @@ namespace EpicBites.Repositories
                     await command.ExecuteNonQueryAsync();
                 }
             }
+        }
+
+        public async Task<User?> LoginAsync(string email, string password)
+        {
+            User user = null;
+
+            using (var connection = new MySqlConnection(_connectionString))
+            {
+                await connection.OpenAsync();
+
+                string query = "SELECT Id, Username, Email, Password, Role FROM User WHERE Email = @Email AND Password = @Password";
+                using (var command = new MySqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@Email", email);
+                    command.Parameters.AddWithValue("@Password", password);
+
+                    using (var reader = await command.ExecuteReaderAsync())
+                    {
+                        if (await reader.ReadAsync())
+                        {
+                            user = new User
+                            {
+                                Id = reader.GetInt32(0),
+                                Username = reader.GetString(1),
+                                Email = reader.GetString(2),
+                                Password = reader.GetString(3),
+                                Role = Enum.Parse<Constants.Enums.UserRole>(reader.GetString(4)),
+                            };
+                        }
+                    }
+                }
+            }
+            return user;
         }
     }
 }
