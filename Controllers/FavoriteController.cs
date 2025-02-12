@@ -24,7 +24,7 @@ namespace EpicBites.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Favorite>> GetFavorite(int id)
+        public async Task<ActionResult<FavoriteDto>> GetFavorite(int id)
         {
             var favorite = await _serviceFavorite.GetByIdAsync(id);
             if (favorite == null)
@@ -35,16 +35,17 @@ namespace EpicBites.Controllers
         }
 
         [HttpPost]
-           public async Task<ActionResult<Favorite>> CreateFavorite(Favorite favorite)
+        public async Task<ActionResult<FavoriteDto>> CreateFavorite(FavoriteDto favoriteDto)
         {
-            var existingFavorite = await _serviceFavorite.GetByIdAsync(favorite.Id);
-            if (existingFavorite != null)
+            var favorite = new Favorite
             {
-                return Conflict($"Esta receta ya la tienes guardada {favorite.Id}.");
-            }
+                Date = favoriteDto.Date,
+                UserId = favoriteDto.UserId,
+                RecipeId = favoriteDto.RecipeId,
+            };
 
             await _serviceFavorite.AddAsync(favorite);
-            return CreatedAtAction(nameof(GetFavorite), new { id = favorite.Id }, favorite);
+            return CreatedAtAction(nameof(_serviceFavorite), new { id = favorite.Id }, favoriteDto);
         }
 
         [HttpDelete("{id}")]
