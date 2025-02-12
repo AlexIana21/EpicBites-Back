@@ -3,7 +3,7 @@ using EpicBites.Services;
 
 namespace EpicBites.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/user")]
     [ApiController]
     public class UserController : ControllerBase
     {
@@ -38,19 +38,6 @@ namespace EpicBites.Controllers
             return Ok(userDto);
         }
 
-        [HttpPost]
-        public async Task<ActionResult<User>> CreateUser(User user)
-        {
-            var existingUser = await _serviceUser.GetByIdAsync(user.Id);
-            if (existingUser != null)
-            {
-                return Conflict($"Ya existe un admin con el ID {user.Id}.");
-            }
-
-            await _serviceUser.AddAsync(user);
-            return CreatedAtAction(nameof(GetUser), new { id = user.Id }, user);
-        }
-
         [HttpPost("login")]
         public async Task<ActionResult<UserDto>> Login([FromBody] LoginDto login)
         {
@@ -70,8 +57,32 @@ namespace EpicBites.Controllers
             return Ok(userDto);
         }
 
+        [HttpPost("register")]
+        public async Task<ActionResult<UserDto>> Register([FromBody] RegisterDto registerDto)
+        {
+            if (await _serviceUser.EmailExistsAsync(registerDto.Email))
+            {
+                return Conflict("El correo electrónico ya está registrado.");
+            }
+
+            if (await _serviceUser.UsernameExistsAsync(registerDto.Username))
+            {
+                return Conflict("El nombre de usuario ya está registrado.");
+            }
+
+            var user = await _serviceUser.RegisterAsync(registerDto.Username, registerDto.Email, registerDto.Password);
+
+            var userDto = new UserDto
+            {
+                Username = user.Username,
+                Email = user.Email,
+                Role = Constants.Enums.UserRole.User
+            };
+            return Ok(userDto);
+        }
+
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateUser(int id, User updateUser)
+        public async Task<IActionResult> UpdateUser(int id, RegisterDto updateUser)
         {
             var existingUser = await _serviceUser.GetByIdAsync(id);
             if (existingUser == null)
@@ -82,8 +93,6 @@ namespace EpicBites.Controllers
             existingUser.Username = updateUser.Username;
             existingUser.Email = updateUser.Email;
             existingUser.Password = updateUser.Password;
-            existingUser.Role = updateUser.Role;
-
 
             await _serviceUser.UpdateAsync(existingUser);
             return NoContent();

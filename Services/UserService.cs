@@ -23,11 +23,6 @@ namespace EpicBites.Service
             return await _userRepository.GetByIdAsync(id);
         }
 
-        public async Task AddAsync(User user)
-        {
-            await _userRepository.AddAsync(user);
-        }
-
         public async Task UpdateAsync(User user)
         {
             await _userRepository.UpdateAsync(user);
@@ -46,6 +41,21 @@ namespace EpicBites.Service
         public async Task<User?> LoginAsync(string email, string password)
         {
             return await _userRepository.LoginAsync(email, password);
+        }
+
+        public async Task<User?> RegisterAsync(string username, string email, string password)
+        {
+            return await _userRepository.RegisterAsync(username, email, password);
+        }
+
+        public async Task<bool> EmailExistsAsync(string email)
+        {
+            return await _userRepository.EmailExistsAsync(email);
+        }
+
+        public async Task<bool> UsernameExistsAsync(string username)
+        {
+            return await _userRepository.UsernameExistsAsync(username);
         }
     }
 }

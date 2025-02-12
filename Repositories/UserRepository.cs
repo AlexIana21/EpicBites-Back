@@ -43,26 +43,6 @@ namespace EpicBites.Repositories
             return users;
         }
 
-        public async Task AddAsync(User user)
-        {
-            using (var connection = new MySqlConnection(_connectionString))
-            {
-                await connection.OpenAsync();
-
-                string query = @"
-                INSERT INTO User (Username, Email, Password, Role) 
-                VALUES (@Username ,@Email, @Password, @Role)";
-
-                using (var command = new MySqlCommand(query, connection))
-                {
-                    command.Parameters.AddWithValue("@Email", user.Email);
-                    command.Parameters.AddWithValue("@Email", user.Email);
-                    command.Parameters.AddWithValue("@Password", user.Password);
-                    command.Parameters.AddWithValue("@Role", user.Role.ToString());
-                    await command.ExecuteNonQueryAsync();
-                }
-            }
-        }
         public async Task DeleteAsync(int id)
         {
             using (var connection = new MySqlConnection(_connectionString))
@@ -167,5 +147,59 @@ namespace EpicBites.Repositories
             }
             return user;
         }
+
+        public async Task<User?> RegisterAsync(string username, string email, string password)
+        {
+            var user = new User
+            {
+                Username = username,
+                Email = email,
+                Password = password,
+                Role = Constants.Enums.UserRole.User
+            };
+
+            using var connection = new MySqlConnection(_connectionString);
+            await connection.OpenAsync();
+
+            string query = "INSERT INTO User (Username, Email, Password, Role) VALUES (@Username, @Email, @Password, @Role)";
+
+            using var command = new MySqlCommand(query, connection);
+            command.Parameters.AddWithValue("@Username", user.Username);
+            command.Parameters.AddWithValue("@Email", user.Email);
+            command.Parameters.AddWithValue("@Password", user.Password);
+            command.Parameters.AddWithValue("@Role", user.Role);
+
+            int rowsAffected = await command.ExecuteNonQueryAsync();
+
+            return user;
+        }
+
+        public async Task<bool> UsernameExistsAsync(string username)
+        {
+            using var connection = new MySqlConnection(_connectionString);
+            await connection.OpenAsync();
+
+            string query = "SELECT Username FROM User WHERE Username = @Username";
+            using var command = new MySqlCommand(query, connection);
+            command.Parameters.AddWithValue("@Username", username);
+
+            using var reader = await command.ExecuteReaderAsync();
+            return await reader.ReadAsync();
+        }
+
+        public async Task<bool> EmailExistsAsync(string email)
+        {
+            using var connection = new MySqlConnection(_connectionString);
+            await connection.OpenAsync();
+
+            string query = "SELECT Email FROM User WHERE Email = @Email";
+            using var command = new MySqlCommand(query, connection);
+            command.Parameters.AddWithValue("@Email", email);
+
+            using var reader = await command.ExecuteReaderAsync();
+            return await reader.ReadAsync();
+        }
+
     }
+
 }
