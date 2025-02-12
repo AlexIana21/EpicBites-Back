@@ -9,6 +9,5 @@ namespace EpicBites.Services
         Task AddAsync(Ingredient ingredient);
         Task UpdateAsync(Ingredient ingredient);
         Task DeleteAsync(int id);
-        Task<Ingredient?> IngredientAsync();
     }
 }

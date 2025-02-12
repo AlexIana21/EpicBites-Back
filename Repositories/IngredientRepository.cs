@@ -130,44 +130,5 @@ namespace EpicBites.Repositories
                 }
             }
         }
-
-        public async Task<Ingredient?> IngredientAsync()
-        {
-            Ingredient ingredient = null;
-
-            using (var connection = new MySqlConnection(_connectionString))
-            {
-                await connection.OpenAsync();
-
-                string query = @"
-                    SELECT Name, Category, Calories, Allergen, Image 
-                    FROM Ingredient
-                    WHERE Id = @Id";
-                
-
-                using (var command = new MySqlCommand(query, connection))
-                {
-
-                    using (var reader = await command.ExecuteReaderAsync())
-                    {
-                        if (await reader.ReadAsync())
-                        {
-                            ingredient = new Ingredient
-                            {
-                                Id = reader.GetInt32(0),
-                                Name = reader.GetString(1),
-                                Category = Enum.Parse<Constants.Enums.Category>(reader.GetString(2)),
-                                Calories = reader.GetInt32(3),
-                                Allergen = reader.IsDBNull(4) ? "" : reader.GetString(4),
-                                Image = reader.GetString(5),
-                            };
-                        }
-                    }
-                }
-            }
-            return ingredient;
-        }
-
-
     }
 }
