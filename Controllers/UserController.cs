@@ -81,6 +81,30 @@ namespace EpicBites.Controllers
             return Ok(userDto);
         }
 
+        [HttpPost("register/admin")]
+        public async Task<ActionResult<UserDto>> RegisterAdmin([FromBody] RegisterDto registerDto)
+        {
+            if (await _serviceUser.EmailExistsAsync(registerDto.Email))
+            {
+                return Conflict("El correo electrónico ya está registrado.");
+            }
+
+            if (await _serviceUser.UsernameExistsAsync(registerDto.Username))
+            {
+                return Conflict("El nombre de usuario ya está registrado.");
+            }
+
+            var user = await _serviceUser.RegisterAsync(registerDto.Username, registerDto.Email, registerDto.Password);
+
+            var userDto = new UserDto
+            {
+                Username = user.Username,
+                Email = user.Email,
+                Role = Constants.Enums.UserRole.Admin
+            };
+            return Ok(userDto);
+        }
+
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateUser(int id, RegisterDto updateUser)
         {
